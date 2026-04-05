@@ -34,7 +34,20 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  // Initialize currentUser from localStorage
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        return JSON.parse(savedUser);
+      } catch (error) {
+        console.error('Failed to parse saved user:', error);
+        return null;
+      }
+    }
+    return null;
+  });
+
   const [users, setUsers] = useState<UserType[]>(DUMMY_USERS);
   const [stores, setStores] = useState<Store[]>(DUMMY_STORES);
   const [products, setProducts] = useState<Product[]>(DUMMY_PRODUCTS);
@@ -50,6 +63,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
+  // Persist currentUser to localStorage whenever it changes
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem('currentUser');
+    }
+  }, [currentUser]);
+
+  // Persist dark mode preference
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -66,6 +89,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setCurrentUser(null);
+    // Clear any other session data if needed
+    localStorage.removeItem('currentUser');
   }, []);
 
   const showToast = useCallback((message: string, type: 'success' | 'error' = 'success') => {
