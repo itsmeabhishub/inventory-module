@@ -34,6 +34,10 @@
   --on-surface-variant: #424752;
   --outline: #727783;
   --outline-variant: #c2c6d4;
+  --surface-hover: rgba(0,71,141,0.06);
+  --btn-hover-bg: rgba(0,71,141,0.06);
+  --sidebar-panel-bg: rgba(255,255,255,0.5);
+  --login-form-bg: rgba(255,255,255,0.95);
   --inverse-surface: #2d3133;
   --inverse-on-surface: #eff1f3;
   --inverse-primary: #a9c7ff;
@@ -77,6 +81,10 @@
   --on-surface-variant: #c2c6d4;
   --outline: #8c9099;
   --outline-variant: #48474e;
+  --surface-hover: rgba(255,255,255,0.08);
+  --btn-hover-bg: rgba(255,255,255,0.08);
+  --sidebar-panel-bg: #161b22;
+  --login-form-bg: #121619;
   --inverse-surface: #e0e3e5;
   --inverse-on-surface: #2d3133;
   --inverse-primary: #00478d;
@@ -184,7 +192,7 @@ h1, h2, h3, h4, h5, .font-manrope {
 }
 
 .nav-item:hover {
-  background: rgba(0,71,141,0.06);
+  background: var(--surface-hover);
   color: var(--primary);
 }
 
@@ -197,7 +205,7 @@ h1, h2, h3, h4, h5, .font-manrope {
 
 .sidebar-user {
   padding: 0.75rem;
-  background: rgba(255,255,255,0.5);
+  background: var(--sidebar-panel-bg);
   border-radius: 0.75rem;
   display: flex;
   align-items: center;
@@ -309,7 +317,7 @@ h1, h2, h3, h4, h5, .font-manrope {
 }
 
 .icon-btn:hover {
-  background: rgba(0,0,0,0.05);
+  background: var(--surface-hover);
 }
 
 .notification-dot {
@@ -336,7 +344,7 @@ h1, h2, h3, h4, h5, .font-manrope {
 }
 
 .btn-logout:hover {
-  background: rgba(0,71,141,0.06);
+  background: var(--btn-hover-bg);
 }
 
 /* Page content */
@@ -472,13 +480,13 @@ h1, h2, h3, h4, h5, .font-manrope {
   background: #ffc5c0;
 }
 
-.btn-ghost {
+..btn-ghost {
   background: transparent;
   color: var(--primary);
 }
 
 .btn-ghost:hover {
-  background: rgba(0,71,141,0.06);
+  background: var(--surface-hover);
 }
 
 .btn-sm {
@@ -806,7 +814,7 @@ h1, h2, h3, h4, h5, .font-manrope {
 .login-brand-logo-icon {
   width: 44px;
   height: 44px;
-  background: rgba(255,255,255,0.15);
+  background: var(--surface-container);
   border-radius: 0.75rem;
   display: flex;
   align-items: center;
@@ -871,7 +879,7 @@ h1, h2, h3, h4, h5, .font-manrope {
 }
 
 .login-form-side {
-  background: rgba(255,255,255,0.95);
+  background: var(--login-form-bg);
   backdrop-filter: blur(20px);
   padding: 3rem;
   display: flex;
