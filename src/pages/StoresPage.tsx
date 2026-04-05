@@ -32,6 +32,10 @@ export default function StoresPage() {
     });
   }, [stores, search]);
 
+  const activeStores = useMemo(() => filtered.filter(s => s.status === 'active'), [filtered]);
+
+  const getEmployeeCount = (storeId: string) => users.filter(u => u.role === 'employee' && u.storeId === storeId).length;
+
   const openAdd = () => {
     setEditingStore(null);
     setFormData(emptyForm);
@@ -114,6 +118,13 @@ export default function StoresPage() {
             <div className="metric-card-label">Active Stores</div>
           </div>
           <div className="metric-card">
+            <div className="metric-card-icon" style={{ background: 'rgba(244, 114, 182, 0.12)', marginBottom: '0.75rem' }}>
+              <span className="material-symbols-outlined" style={{ color: '#c026d3' }}>block</span>
+            </div>
+            <div className="metric-card-value" style={{ color: '#c026d3' }}>{stores.filter(s => s.status === 'inactive').length}</div>
+            <div className="metric-card-label">Inactive Stores</div>
+          </div>
+          <div className="metric-card">
             <div className="metric-card-icon" style={{ background: 'rgba(0,81,74,0.08)', marginBottom: '0.75rem' }}>
               <span className="material-symbols-outlined" style={{ color: 'var(--tertiary)' }}>inventory_2</span>
             </div>
@@ -191,6 +202,7 @@ export default function StoresPage() {
                   <th>Store Name</th>
                   <th>Location</th>
                   <th>Manager</th>
+                  <th>Employees</th>
                   <th>Products</th>
                   <th>Status</th>
                   <th>Created</th>
@@ -198,13 +210,14 @@ export default function StoresPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.length === 0 ? (
-                  <tr><td colSpan={7}><div className="empty-state"><span className="material-symbols-outlined">store</span><h3>No stores found</h3></div></td></tr>
-                ) : filtered.map(s => (
+                {activeStores.length === 0 ? (
+                  <tr><td colSpan={8}><div className="empty-state"><span className="material-symbols-outlined">store</span><h3>No active stores found</h3></div></td></tr>
+                ) : activeStores.map(s => (
                   <tr key={s.id}>
                     <td><div style={{ fontWeight: 600, color: 'var(--primary)', cursor: 'pointer' }} onClick={() => navigate(`/stores/${s.id}`)}>{s.name}</div></td>
                     <td style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>{s.location}</td>
                     <td style={{ fontSize: '0.875rem' }}>{s.managerName || <span style={{ color: 'var(--secondary)' }}>Unassigned</span>}</td>
+                    <td style={{ fontWeight: 700, fontFamily: 'Manrope, sans-serif' }}>{getEmployeeCount(s.id)}</td>
                     <td style={{ fontWeight: 700, fontFamily: 'Manrope, sans-serif' }}>{getProductCount(s.id)}</td>
                     <td>
                       <span className={`chip ${s.status === 'active' ? 'chip-success' : 'chip-neutral'}`}>
