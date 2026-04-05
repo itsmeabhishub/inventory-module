@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Layout from '../components/Layout';
 import TopBar from '../components/TopBar';
@@ -14,6 +15,7 @@ interface StoreFormData {
 const emptyForm: StoreFormData = { name: '', location: '', managerId: '', status: 'active' };
 
 export default function StoresPage() {
+  const navigate = useNavigate();
   const { stores, setStores, users, products, showToast } = useApp();
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -125,7 +127,7 @@ export default function StoresPage() {
           {filtered.map(s => {
             const productCount = getProductCount(s.id);
             return (
-              <div key={s.id} className="card" style={{ padding: '1.5rem' }}>
+              <div key={s.id} className="card" style={{ padding: '1.5rem', cursor: 'pointer', transition: 'all 0.2s ease' }} onClick={() => navigate(`/stores/${s.id}`)}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                   <div style={{
                     width: 44, height: 44, borderRadius: '0.75rem',
@@ -140,7 +142,7 @@ export default function StoresPage() {
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: '1rem', fontWeight: 800, fontFamily: 'Manrope, sans-serif', marginBottom: '0.25rem' }}>{s.name}</h3>
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, fontFamily: 'Manrope, sans-serif', marginBottom: '0.25rem', color: 'var(--primary)' }}>{s.name}</h3>
                 <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 14 }}>location_on</span>
                   {s.location}
@@ -160,11 +162,11 @@ export default function StoresPage() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button className="btn btn-ghost btn-sm" style={{ flex: 1, justifyContent: 'center' }} onClick={() => openEdit(s)}>
+                  <button className="btn btn-ghost btn-sm" style={{ flex: 1, justifyContent: 'center' }} onClick={(e) => { e.stopPropagation(); openEdit(s); }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 14 }}>edit</span>
                     Edit
                   </button>
-                  <button className="btn btn-danger btn-sm" style={{ flex: 1, justifyContent: 'center' }} onClick={() => setDeleteConfirm(s)}>
+                  <button className="btn btn-danger btn-sm" style={{ flex: 1, justifyContent: 'center' }} onClick={(e) => { e.stopPropagation(); setDeleteConfirm(s); }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 14 }}>delete</span>
                     Delete
                   </button>
@@ -200,7 +202,7 @@ export default function StoresPage() {
                   <tr><td colSpan={7}><div className="empty-state"><span className="material-symbols-outlined">store</span><h3>No stores found</h3></div></td></tr>
                 ) : filtered.map(s => (
                   <tr key={s.id}>
-                    <td><div style={{ fontWeight: 600 }}>{s.name}</div></td>
+                    <td><div style={{ fontWeight: 600, color: 'var(--primary)', cursor: 'pointer' }} onClick={() => navigate(`/stores/${s.id}`)}>{s.name}</div></td>
                     <td style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>{s.location}</td>
                     <td style={{ fontSize: '0.875rem' }}>{s.managerName || <span style={{ color: 'var(--secondary)' }}>Unassigned</span>}</td>
                     <td style={{ fontWeight: 700, fontFamily: 'Manrope, sans-serif' }}>{getProductCount(s.id)}</td>
@@ -213,6 +215,9 @@ export default function StoresPage() {
                     <td style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>{s.createdAt}</td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.375rem' }}>
+                        <button className="btn btn-ghost btn-sm" onClick={() => navigate(`/stores/${s.id}`)} style={{ padding: '0.25rem 0.5rem' }} title="View store details">
+                          <span className="material-symbols-outlined" style={{ fontSize: 16 }}>visibility</span>
+                        </button>
                         <button className="btn btn-ghost btn-sm" onClick={() => openEdit(s)} style={{ padding: '0.25rem 0.5rem' }}>
                           <span className="material-symbols-outlined" style={{ fontSize: 16 }}>edit</span>
                         </button>

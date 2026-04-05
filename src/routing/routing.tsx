@@ -5,6 +5,7 @@ import LoginPage from '../pages/LoginPage';
 import DashboardPage from '../pages/DashboardPage';
 import StoreManagerDashboard from '../pages/StoreManagerDashboard';
 import EmployeeDashboard from '../pages/EmployeeDashboard';
+import StoreDetailsPage from '../pages/StoreDetailsPage';
 import { routes } from './index';
 import type { UserRole } from './index';
 
@@ -102,6 +103,15 @@ export function AppRoutes() {
         element={
           <AdminRoute>
             {routes.find(r => r.path === '/stores')?.element}
+          </AdminRoute>
+        }
+      />
+
+      <Route
+        path="/stores/:storeId"
+        element={
+          <AdminRoute>
+            <StoreDetailsPage />
           </AdminRoute>
         }
       />
